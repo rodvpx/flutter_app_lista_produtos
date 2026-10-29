@@ -21,10 +21,21 @@ class _AddProductScreenState extends State<AddProductScreen> {
   ];
   String _selectedCategory = 'Eletrônicos';
 
+  /// Aceita tanto "19.90" quanto "19,90" (padrão brasileiro).
+  double? _parsePrice(String value) {
+    final normalized = value.trim().replaceAll(' ', '');
+    if (normalized.contains(',')) {
+      return double.tryParse(
+        normalized.replaceAll('.', '').replaceAll(',', '.'),
+      );
+    }
+    return double.tryParse(normalized);
+  }
+
   void _saveProduct() {
     if (_formKey.currentState!.validate()) {
-      final String name = _nameController.text;
-      final double price = double.tryParse(_priceController.text) ?? 0.0;
+      final String name = _nameController.text.trim();
+      final double price = _parsePrice(_priceController.text) ?? 0.0;
 
       final newProduct = Product(
         name: name,
@@ -74,7 +85,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Informe o preço';
                       }
-                      if (double.tryParse(value) == null) {
+                      if (_parsePrice(value) == null) {
                         return 'Informe um número válido';
                       }
                       return null;
