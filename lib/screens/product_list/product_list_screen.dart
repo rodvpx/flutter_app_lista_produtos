@@ -56,6 +56,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   padding: const EdgeInsets.only(bottom: 10),
                   child: Card(
                     child: ListTile(
+                      onTap: () => _addToCart(product),
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 14,
                         vertical: 8,
